@@ -1,9 +1,9 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const SpotifyStrategy = require('passport-spotify').Strategy;
+const SpotifyStrategy = require("passport-spotify").Strategy;
 const mongoose = require("mongoose");
 const UserSchema = require("../models/userModel");
-const UserModel = mongoose.model("Author", UserSchema);
+const UserModel = mongoose.model("User", UserSchema);
 const { authenticate } = require("./authTools");
 
 passport.use(
@@ -25,7 +25,7 @@ passport.use(
 
       try {
         const user = await UserModel.findOne({ googleId: profile.id });
-
+        console.log(user);
         if (user) {
           const tokens = await authenticate(user);
           next(null, { user, tokens });
@@ -48,10 +48,10 @@ passport.use(
     {
       clientID: process.env.SPOTIFY_ID,
       clientSecret: process.env.SPOTIFY_SECRET,
-      callbackURL: process.env.CALLBACK_URL_SPOTIFY
+      callbackURL: process.env.CALLBACK_URL_SPOTIFY,
     },
     async (request, accessToken, refreshToken, profile, next) => {
-      console.log(profile)
+      console.log(profile);
       const newUser = {
         spotifyId: profile.id,
         nickname: profile.display_name,
@@ -76,10 +76,8 @@ passport.use(
       }
     }
   )
-)
+);
 
 passport.serializeUser(function (user, next) {
   next(null, user);
 });
-
-

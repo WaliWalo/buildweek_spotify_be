@@ -3,22 +3,22 @@ const Schema = mongoose.Schema;
 const bcrypt = require("bcryptjs");
 const UserSchema = new Schema(
   {
-    firstName: { type: String, },
-    lastName: { type: String, },
+    firstName: { type: String },
+    lastName: { type: String },
     email: {
       type: String,
       trim: true,
       lowercase: true,
-      unique: true,
       match: [
         /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         "Please fill a valid email address",
       ],
     },
-    password: { type: String, },
-    googleId: String,
-    facebookId: String,
-    spotifyId: String,
+    password: { type: String },
+    nickname: { type: String },
+    googleId: { type: String },
+    facebookId: { type: String },
+    spotifyId: { type: String },
   },
   { timestamps: true }
 );
