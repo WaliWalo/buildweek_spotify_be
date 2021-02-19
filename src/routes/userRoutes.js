@@ -4,6 +4,7 @@ const {
   login,
   logout,
   googleAuthenticate,
+  spotifyAuthenticate
 } = require("../controllers/userController");
 const { authorize } = require("../controllers/authMiddleware");
 const passport = require("passport");
@@ -19,6 +20,12 @@ const routes = (app) => {
   app
     .route("/users/googleRedirect")
     .get(passport.authenticate("google"), googleAuthenticate);
+  app
+    .route("/users/spotifyLogin")
+    .get(passport.authenticate("spotify", { scope: ["profile", "email"] }));
+  app
+    .route("/users/spotifyRedirect")
+    .get(passport.authenticate("spotify"), spotifyAuthenticate);
 };
 
 module.exports = routes;
