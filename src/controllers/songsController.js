@@ -103,10 +103,7 @@ const addSongToPlaylist = async (req, res, next) => {
         req.params.playlistId,
         {
           $set: {
-            songs: [
-              ...selectedPlaylist.songs,
-              mongoose.Types.ObjectId(req.body.songId),
-            ],
+            songs: [...selectedPlaylist.songs, { songId: req.body.songId }],
           },
         }
       );
@@ -145,16 +142,22 @@ const deleteSongFromPlaylist = async (req, res, next) => {
   try {
     const selectedPlaylist = await Playlist.findById(req.params.playlistId);
     const playlistWithoutSelectedSong = selectedPlaylist.songs.filter(
-      (song) =>
-        mongoose.Types.ObjectId(song) !==
-        mongoose.Types.ObjectId(req.params.songId)
+      (song) => {
+        console.log(typeof song.songId, typeof parseInt(req.params.songId));
+        return song.songId !== parseInt(req.params.songId);
+      }
     );
+    console.log(playlistWithoutSelectedSong);
+    let songsToSave = [];
+    if (playlistWithoutSelectedSong.length > 0) {
+      songsToSave = playlistWithoutSelectedSong.songs;
+    }
     if (selectedPlaylist) {
       const updatedPlaylist = await Playlist.findByIdAndUpdate(
         req.params.playlistId,
         {
           $set: {
-            songs: [playlistWithoutSelectedSong],
+            songs: songsToSave,
           },
         }
       );
