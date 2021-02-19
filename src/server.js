@@ -5,6 +5,7 @@ const listEndpoints = require("express-list-endpoints");
 const mongoose = require("mongoose");
 const routes = require("./routes/userRoutes");
 const userRoutes = require("./routes/userRoutes");
+const songRoutes = require("./routes/songRoutes");
 const oauth = require("./controllers/oauth");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
@@ -37,6 +38,7 @@ server.use(cookieParser());
 server.use(passport.initialize());
 routes(server);
 userRoutes(server);
+songRoutes(server);
 
 // ERROR HANDLERS MIDDLEWARES
 
