@@ -73,10 +73,23 @@ const googleAuthenticate = async (req, res, next) => {
   }
 };
 
+const spotifyAuthenticate = async (req, res, next) => {
+  try {
+    res.cookie("accessToken", req.user.tokens.token, {
+      httpOnly: false,
+    });
+
+    res.status(200).redirect(process.env.FE_URL);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getUsers,
   addNewUser,
   login,
   logout,
   googleAuthenticate,
+  spotifyAuthenticate
 };
